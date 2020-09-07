@@ -112,36 +112,22 @@ useradd -m -G wheel,audio,video "$username"
 pacman -Syy
 
 #Grab more base packages and cpu specific microcode
-[ "$cpu" == amd ] && (echo; echo; echo Y) | pacman -S linux linux-firmware amd-ucode
-[ "$cpu" == intel ] && (echo; echo; echo Y) | pacman -S linux linux-firmware intel-ucode
-[ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S linux linux-firmware
+[ "$cpu" == amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
+[ "$cpu" == intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
+[ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
-#Include soon above:base-devel
-
-#Will include this once we install base-devel (which comes with sudo)
 #Give the wheel group root priviledges
-#sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers #Not advised; don't make typos here, or use visudo
+sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 #Network Manager
 echo Y | pacman -S networkmanager
 systemctl enable NetworkManager
 
-#echo Y | pacman -S openssh
-#systemctl enable sshd.service
-#systemctl start sshd.service
-
-echo Y | pacman -S grub efibootmgr #OLD:os-prober amd-ucode dosfstools;
-
-
-#Other programs that were once in base or that may be worth getting: sysfsutils usbutils e2fsprogs dosfstools mtools inetutils netctl dhcpcd device-mapper cryptsetup less lvm2 openssh vim zsh man-db man-pages
-
+#Bootloader install and setup
+echo Y | pacman -S grub efibootmgr
 mkdir /efi
-#mkdir -p /boot/efi
 mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
-#mount /dev/$efipart /boot/efi
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
-#grub-install --target=x86_64-efi --efi-directory=boot/efi --bootloader-id=GRUB
-
 grub-mkconfig -o /boot/grub/grub.cfg
 
 #Clean up
