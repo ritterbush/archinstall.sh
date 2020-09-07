@@ -4,6 +4,7 @@ disk=sda
 efipart=sda1
 rootpart=sda2
 timezone=America/Los_Angeles
+cpu=amd #Must be amd or intel or other
 hostname=arch
 staticip=127.0.1.1
 username=paul
@@ -120,11 +121,13 @@ echo "$hostname" > /etc/hostname
 
 echo -e '127.0.0.1\tlocalhost\n::1\t\tlocalhost\n'"$staticip\t""$hostname"'.localdomain\t'"$hostname" | cat >> /etc/hosts
 
-(echo "$pw"; echo "$pw") | passwd
+(echo "$password"; echo "$password") | passwd
 useradd -m -G wheel,audio,video "$username"
-(echo "$pw"; echo "$pw") | passwd "$username"
+(echo "$password"; echo "$password") | passwd "$username"
 
-(echo; echo; echo Y) | pacman -S linux linux-firmware amd-ucode
+[ "$cpu" == amd ] && (echo; echo; echo Y) | pacman -S linux linux-firmware amd-ucode
+[ "$cpu" == intel ] && (echo; echo; echo Y) | pacman -S linux linux-firmware intel-ucode
+[ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S linux linux-firmware
 
 #Old:base-devel linux linux-firmware lvm2
 
