@@ -170,6 +170,10 @@ grub-install --target=x86_64-efi --efi-directory=boot/efi --bootloader-id=GRUB #
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # mkinitcpio -P is not needed, according to the wiki, and verified that it generates the same files on linux installation
+
+#Clean up
+rm /mnt/chrootfile.sh
+
 # Good idea to unmount the USB drive before exiting chroot; then,
 
 umount -a
@@ -183,7 +187,6 @@ chmod +x /mnt/chrootfile.sh
 #Execute it
 arch-chroot /mnt ./chrootfile.sh
 
-#Clean up
-rm /mnt/chrootfile.sh
+
 
 echo done
