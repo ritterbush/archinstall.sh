@@ -1,6 +1,6 @@
 !/bin/sh
 
-disk=sda
+disk=sda #Wipes this disk '/dev/disk'
 efipart=sda1 #Match disk above but keep 1
 rootpart=sda2 #Match disk above but keep 2
 timezone=America/Los_Angeles
