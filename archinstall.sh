@@ -160,7 +160,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # mkinitcpio -P is not needed, according to the wiki, and verified that it generates the same files on linux installation
 
 #Clean up
-rm chrootfile.sh
+rm -f /chrootfile.sh
 
 # Good idea to unmount the USB drive before exiting chroot
 umount -a
