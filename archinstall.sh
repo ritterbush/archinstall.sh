@@ -152,7 +152,7 @@ mkdir /efi
 #mkdir -p /boot/efi
 mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 #mount /dev/$efipart /boot/efi
-grub-install --target=x86_64-efi --efi-directory=efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
+grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 #grub-install --target=x86_64-efi --efi-directory=boot/efi --bootloader-id=GRUB
 
 grub-mkconfig -o /boot/grub/grub.cfg
