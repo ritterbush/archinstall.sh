@@ -11,35 +11,32 @@ username=paul
 password=password
 
 <<COMMENT
-
-        Note: this version makes several assumptions: one, it assumes that the disk named in the disk variable above will be WIPED CLEAN.
-        It also installs only for UEFI systems. It also provides USA specific repository mirrors. It also assumes that a network is already
-        connected and in use once booted into the live environment.
+        This script installs Arch Linux while making several assumptions: one, it assumes that the disk named in the disk variable above will be WIPED CLEAN.
+        It also installs only for UEFI systems. It also provides USA specific repository mirrors. It also assumes that a network is connected and in use 
+        once booted into the live environment.
 
         Checklist:
         Verify Signature/Checksums of downloaded Arch ISO;
-        Create Bootble;
+        Create bootable;
         Boot into live environment;
-        set keyboard layout if it is not US;
-        confirm UEFI
-        mode with: ls /sys/firmware/efi/efivars;
-        use lsblk to confirm that the disk variable set above matches;
-        use ping to ensure internet connection;
-        configure network router if desired (e.g. to assign a static IP);
-        curl/wget this script, or, alternatively, mkdir and then mount USB device with
-        this script to /mnt/usb (use lsblk to see devices);
-        give this script executable permissions with chmod +x /mnt/usb/archinstall.sh ;
+        Set keyboard layout if it is not US;
+        Confirm UEFI mode with: ls /sys/firmware/efi/efivars;
+        Use lsblk to confirm that the disk variable set above matches;
+        Use ping to ensure internet connection;
+        Configure network router if desired (e.g. to assign a static IP);
+        Curl this script with the full https address to the raw file (curl https://link/to/raw/file.sh > archinstall.sh), 
+        or, alternatively, mkdir and then mount a USB device with this script to /mnt/usb (use lsblk to help see devices);
+        Give the script executable permissions with chmod +x /path/to/archinstall.sh (type pwd to see current directory);
         
-        You could view the script with the less command (vim keys to navigate), and
-        change initial variables with sed -i--e.g., sed -i 's/password=password/password=supersecret'/mnt/usb/archinstall.sh  , 
-        or you could edit it first with a text editor like a normal person, and even copy it to your 
-        own site to curl/wget it.
+        You can view the script with the less command (vim keys to navigate), and
+        change any initial variables with sed -i--e.g., sed -i 's/password=password/password=supersecret' /path/to/archinstall.sh  , 
+        or you could edit it first with a text editor like a sane person, and even copy it to your own site and curl it.
         
         LICENSE: MIT or Abandonware, whichever you prefer
         Warranty: Zero, but I am sorry about what that did there
         
         Run script:
-        /mnt/usb/thisfile.sh
+        /path/to/archinstall.sh
 
 COMMENT
 
