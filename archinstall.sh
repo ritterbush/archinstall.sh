@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 disk=sda #Wipes this disk '/dev/disk'
 efipart=sda1 #Match disk above but keep 1
