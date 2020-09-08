@@ -1,11 +1,13 @@
 #!/bin/sh
 
+# Arch Linux Post install setup script
+
 password=password
 
-# Arch Linux Post install setup script
+# Update pkg list
 (echo "$password"; echo) | sudo pacman -Syu
 
-# Xorg server, terminal, editor, browser, varous packages my scripts use, and whatever
+# Xorg server, shell, terminal, editor, browser, varous packages my scripts use, and extras
 (echo; echo; echo) | sudo pacman -S xorg xorg-init zsh git alacritty neovim firefox picom xwallpaper sxiv python-pywal neofetch htop
 
 # Directory for building programs from source
