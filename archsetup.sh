@@ -21,9 +21,9 @@ git clone https://github.com/ritterbush/files
 mv ~/Programs/files/dwm ~/Programs/dwm
 mv ~/Programs/files/dmenu ~/Programs/dmenu
 cd ~/Programs/dwm
-(echo) | sudo make clean install
+sudo make clean install
 cd ~/Programs/dmenu
-(echo) | sudo make clean install
+sudo make clean install
 
 # xinitrc
 cp ~/Programs/files/.xinitrc ~/.xinitrc
@@ -32,7 +32,7 @@ cp ~/Programs/files/.xinitrc ~/.xinitrc
 cp ~/Programs/files/.zshrc ~/.zshrc
 
 # change shell to zsh
-(echo /bin/zsh) | chsh 
+(echo "$password"; echo /bin/zsh) | chsh 
 
 # shell scripts, neovim config and plugins, alacritty config 
 cp -r ~/Programs/files/.local ~/.local
