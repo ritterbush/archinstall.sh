@@ -29,6 +29,9 @@ cp ~/Programs/files/.xinitrc ~/.xinitrc
 # zshrc
 cp ~/Programs/files/.zshrc ~/.zshrc
 
+# change shell to zsh
+(echo /bin/zsh) | chsh 
+
 # shell scripts, neovim config and plugins, alacritty config 
 cp -r ~/Programs/files/.local ~/.local
 cp -r ~/Programs/files/.config ~/.config
