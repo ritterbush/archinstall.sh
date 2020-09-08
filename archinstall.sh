@@ -125,7 +125,7 @@ sed -i "s/^#Color/Color/" /etc/pacman.conf
 sed -i "s/^#VerbosePkgLists/VerbosePkgLists/"/etc/pacman.conf
 
 # Enable 32-bit library support
-sed -i "/^#\[multilib\]/aQQ/"/etc/pacman.conf
+sed -i "/^#\[multilib\]/aQQ"/etc/pacman.conf
 sed -iz "s/QQ\n#Include/Include/"/etc/pacman.conf
 sed -i "s/^#\[multilib\]/[multilib]/"/etc/pacman.conf
 
