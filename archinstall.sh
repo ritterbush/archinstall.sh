@@ -124,6 +124,9 @@ sed -i "/#VerbosePkgLists/aILoveCandy" /etc/pacman.conf
 sed -i "s/^#Color/Color/" /etc/pacman.conf
 sed -i "s/^#VerbosePkgLists/VerbosePkgLists/"/etc/pacman.conf
 
+# Allow installation of 32-bit libraries
+ 
+
 # Use all cores when compiling from source
 sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/ /etc/makepkg.conf
 
