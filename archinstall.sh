@@ -41,10 +41,10 @@ password=password
 COMMENT
 
 
-#Update System Clock
+# Update System Clock
 timedatectl set-ntp true
 
-#Wipes the disk, and in particular it wipes the partitions previously made first, if this script has been already run 
+# Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
 ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
 sleep 1
 ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
@@ -52,15 +52,15 @@ sleep 1
 ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
 sleep 1
 
-#Create GPT partition table
+# Create GPT partition table
 (echo g; echo w) | fdisk /dev/"$disk"
 sleep 2
 
-#Create efi and root partitions; efi is 512MB and root is rest of drive
+# Create efi and root partitions; efi is 512MB and root is rest of drive
 (echo n; echo; echo; echo +512M; echo t; echo; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
 sleep 2
 
-#Make file systems and mount
+# Make file systems and mount
 mkfs.fat -F32 /dev/"$efipart"
 mkfs.ext4 /dev/"$rootpart"
 mkdir -p /mnt/efi
@@ -72,66 +72,79 @@ mount /dev/"$rootpart" /mnt
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
 
-#Send good USA sites to the top of the  mirrorlist
+# Send good USA sites to the top of the  mirrorlist
 sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
 
-#Install just the bare minimum until chroot
+# Install just the bare minimum until chroot
 pacstrap /mnt base
 
-#Generate fstab
+# Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 
-#Create the chroot script that executes inside the new Arch system 
+# Create the chroot script that executes inside the new Arch system 
 cat > /mnt/chrootfile.sh <<End-of-message
 
-#Set Timezone
+# Set Timezone
 ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime
 hwclock --systohc
 
-#Localization
+# Localization
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 sed -i 's/#en_US ISO-8859-1/en_US ISO-8859-1/' /etc/locale.gen
 locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 
-#Sets LANG=en_US.UTF-8 as the BASH keyboard
+# Sets LANG=en_US.UTF-8 as the BASH keyboard
 #export LANG=en_US.UTF-8
 
-#Create hostname file with hostname
+# Create hostname file with hostname
 echo "$hostname" > /etc/hostname
 
-#Create hosts file
+# Create hosts file
 echo -e '127.0.0.1\tlocalhost\n::1\t\tlocalhost\n'"$staticip\t""$hostname"'.localdomain\t'"$hostname" | cat >> /etc/hosts
 
-#Give root a password, add username to wheel, audio, and video groups and give username same password as root
+# Give root a password, add username to wheel, audio, and video groups and give username same password as root
 (echo "$password"; echo "$password") | passwd
 useradd -m -G wheel,audio,video "$username"
 (echo "$password"; echo "$password") | passwd "$username"
 
-#Update available packages list
+# Update available packages list
 pacman -Syy
 
-#Grab more base packages and cpu specific microcode
+# Grab more base packages and cpu specific microcode
 [ "$cpu" == amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
 [ "$cpu" == intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
 [ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
-#Give the wheel group root priviledges
+# Give the wheel group root priviledges
 sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
-#Network Manager
+# Add Pacman the videogame character to the pacman progress bar, make pacman more colorful, and see pkg versions
+sed -i "/#VerbosePkgLists/aILoveCandy" /etc/pacman.conf
+sed -i "s/^#Color/Color/" /etc/pacman.conf
+sed -i "s/^#VerbosePkgLists/VerbosePkgLists/"/etc/pacman.conf
+
+# Use all cores when compiling from source
+sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/ /etc/makepkg.conf
+
+# Network Manager
 echo Y | pacman -S networkmanager
 systemctl enable NetworkManager
 
-#Bootloader install and setup
+# Bootloader install and setup
 echo Y | pacman -S grub efibootmgr
 mkdir /efi
 mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
-#Clean up
+# Clean up
 rm -f /chrootfile.sh
+
+# Grab post-install setup script (to run after verifying that things are basically working)
+curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
+mv archsetup.sh /home/"$username"/archsetup.sh
+chown "$username":"$username" /home/"$username"/archsetup.sh
 
 # Good idea to unmount the USB drive before exiting chroot
 umount -a
@@ -139,10 +152,10 @@ exit
 
 End-of-message
 
-#Make that script executable
+# Make that script executable
 chmod +x /mnt/chrootfile.sh
 
-#Execute it
+# Execute it
 arch-chroot /mnt ./chrootfile.sh
 
 echo done
