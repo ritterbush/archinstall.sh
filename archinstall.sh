@@ -1,10 +1,10 @@
 #!/bin/sh
 
-disk=sda #Wipes this disk '/dev/disk'
-efipart=sda1 #Match disk above but keep 1
-rootpart=sda2 #Match disk above but keep 2
-timezone=America/Los_Angeles
-cpu=amd #Must be amd or intel or other
+disk=sda # Wipes this disk '/dev/disk'
+efipart=sda1 # Match disk above but keep 1
+rootpart=sda2 # Match disk above but keep 2
+timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
+cpu=amd # Must be amd or intel or other
 hostname=arch
 staticip=127.0.1.1
 username=paul
@@ -14,6 +14,13 @@ password=password
         This script installs Arch Linux while making several assumptions: one, it assumes that the disk named in the disk variable above will be WIPED CLEAN.
         It also installs only for UEFI systems. It also provides USA specific repository mirrors. It also assumes that a network is connected and in use 
         once booted into the live environment. It also makes no swap partition, uses ext4, and probably makes more assumptions of this sort. Nothing too weird.
+        
+        I've added rudimentary getopts support, so now you can use any or all of the following options to change the above starting variables: 
+        
+        -u username -p password -h -hostname -d disk -t timezone -s staticip
+         
+        Also use -a, or -i, or -o alone (at the end is fine) for AMD, Intel or other cpu support.
+        
 
         Checklist:
         Verify Signature/Checksums of downloaded Arch ISO;
@@ -23,16 +30,16 @@ password=password
         Confirm UEFI mode with: ls /sys/firmware/efi/efivars;
         Use lsblk to confirm that the disk variable set above matches;
         Use ping to ensure internet connection;
-        Configure network router if desired (e.g. to assign a static IP);
-        Curl this script with the full https address to the raw file (curl https://link/to/raw/file.sh > archinstall.sh), 
-        or, alternatively, mkdir and then mount a USB device with this script to /mnt/usb (use lsblk to help see devices);
+        Configure network router if desired (e.g. to assign a static IP--set static ip variable accordingly if so);
+        Curl this script with the full https address to the raw file (curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archinstall.sh > archinstall.sh), 
+        or, alternatively, mkdir and then mount a USB device with this script to /mnt/usb (use lsblk to see device paths);
         Give the script executable permissions with chmod +x /path/to/archinstall.sh (type pwd to see current directory);
         
         You can view the script with the less command (vim keys to navigate), and
         change any initial variables with sed -i--e.g., sed -i 's/password=password/password=supersecret' /path/to/archinstall.sh  , 
         or you could edit it first with a text editor like a sane person, and even copy it to your own site and curl it.
         
-        LICENSE: MIT or Abandonware, whichever you prefer
+        LICENSE: MIT, GPLv3, or Abandonware, whichever you prefer
         WARRANTY: Zero, and I am sorry about what that did there
         
         Run script:
@@ -40,6 +47,33 @@ password=password
 
 COMMENT
 
+# I've added rudimentary getopts support
+# So now you can use any or all of the following options: 
+# -u username -p password -h -hostname -d disk -t timezone -s staticip
+# Also use -a, or -i, or -o alone (at the end is fine) for AMD, Intel or other cpu support
+
+while getopts ":u:p:h:d:t:s:aio" opt; do
+  case ${opt} in
+    u ) username=${OPTARG}
+      ;;
+    p ) password=${OPTARG}
+      ;;
+    h ) hostname=${OPTARG}
+      ;;
+    d ) disk=${OPTARG}
+      ;;
+    t ) timezone=${OPTARG}
+      ;;
+    s ) staticip=${OPTARG}
+      ;;
+    a ) cpu=amd
+      ;;
+    i ) cpu=intel
+      ;;
+    o ) cpu=other
+      ;;
+  esac
+done
 
 # Update System Clock
 timedatectl set-ntp true
