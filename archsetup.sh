@@ -23,7 +23,11 @@ mkdir ~/Programs
 
 # Get my dwm/dmenu desktop environment, various dotfiles, and scripts
 git clone https://github.com/ritterbush/files ~/Programs/
-
+sleep 10
+echo "$(pwd)"
+echo "$(ls ~/Programs)"
+echo "$(ls ~/Programs/files)"
+sleep 5
 # Move dwm and dmenu so colors will be set with py-wal before building
 mv ~/Programs/files/dwm ~/Programs/
 mv ~/Programs/files/dmenu ~/Programs/
