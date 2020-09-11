@@ -26,17 +26,17 @@ mkdir -p ~/Pictures/Wallpapers
 curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 # xinitrc
-cp ~/Programs/files/.xinitrc ~/.xinitrc
+cp -f ~/Programs/files/.xinitrc ~/.xinitrc
 
 # zshrc
-cp ~/Programs/files/.zshrc ~/.zshrc
+cp -f ~/Programs/files/.zshrc ~/.zshrc
 
 # change shell to zsh
 (echo "$password"; echo /bin/zsh) | chsh 
 
 # shell scripts, neovim config and plugins, alacritty config 
-cp -r ~/Programs/files/.local ~/.local
-cp -r ~/Programs/files/.config ~/.config
+cp -rf ~/Programs/files/.local ~/.local
+cp -rf ~/Programs/files/.config ~/.config
 
 # picom compositor config
 mkdir -p ~/.config/picom
