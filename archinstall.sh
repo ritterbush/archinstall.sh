@@ -192,6 +192,9 @@ chmod +x /home/"$username"/archsetup.sh
 sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
 sed -i "s/username=username/username=${username}/" /home/"$username"/archsetup.sh
 
+#Try running it as username
+echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh"
+
 # Good idea to unmount the USB drive before exiting chroot
 umount -a
 exit
