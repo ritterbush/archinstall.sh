@@ -20,7 +20,7 @@ mv ~/Programs/files/dwm ~/Programs/dwm
 mv ~/Programs/files/dmenu ~/Programs/dmenu
 
 # Download Fall wallpaper from Pexels under CC0 license
-makdir -p ~/Pictures/Wallpapers
+mkdir -p ~/Pictures/Wallpapers
 curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 # xinitrc
