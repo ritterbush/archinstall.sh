@@ -18,8 +18,6 @@ git clone https://github.com/ritterbush/files
 # Move dwm and dmenu so colors will be set with py-wal before building
 mv ~/Programs/files/dwm ~/Programs/dwm
 mv ~/Programs/files/dmenu ~/Programs/dmenu
-cd ~/Programs/dwm
-cd ~/Programs/dmenu
 
 # Download Fall wallpaper from Pexels under CC0 license
 makdir -p ~/Pictures/Wallpapers
