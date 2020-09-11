@@ -13,24 +13,23 @@ username=username
 
 # Directory for building programs from source
 mkdir ~/Programs
-cd ~/Programs
 
 # Get my dwm/dmenu desktop environment, various dotfiles, and scripts
-git clone https://github.com/ritterbush/files
+git clone https://github.com/ritterbush/files ~/Programs/
 
 # Move dwm and dmenu so colors will be set with py-wal before building
-mv ~/Programs/files/dwm ~/Programs/dwm
-mv ~/Programs/files/dmenu ~/Programs/dmenu
+mv ~/Programs/files/dwm ~/Programs/
+mv ~/Programs/files/dmenu ~/Programs/
 
 # Download Fall wallpaper from Pexels under CC0 license
 mkdir -p ~/Pictures/Wallpapers
 curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 # xinitrc
-cp -f ~/Programs/files/.xinitrc ~/.xinitrc
+cp -f ~/Programs/files/.xinitrc ~/
 
 # zshrc
-cp -f ~/Programs/files/.zshrc ~/.zshrc
+cp -f ~/Programs/files/.zshrc ~/
 
 # change shell to zsh
 (echo "$password"; echo /bin/zsh) | chsh 
