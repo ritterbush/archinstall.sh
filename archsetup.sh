@@ -3,6 +3,7 @@
 # After reboot and login enter startx to start dwm
 
 password=password
+username=username
 
 # Update pkg list
 (echo "$password"; echo "$password"; echo) | sudo pacman -Syu
@@ -35,8 +36,8 @@ cp -f ~/Programs/files/.zshrc ~/.zshrc
 (echo "$password"; echo /bin/zsh) | chsh 
 
 # shell scripts, neovim config and plugins, alacritty config 
-cp -rf ~/Programs/files/.local ~/.local
-cp -rf ~/Programs/files/.config ~/.config
+cp -rf ~/Programs/files/.local ~/
+cp -rf ~/Programs/files/.config ~/
 
 # picom compositor config
 mkdir -p ~/.config/picom
