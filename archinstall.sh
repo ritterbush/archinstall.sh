@@ -164,7 +164,7 @@ sed -i -z "s/QQ\n#Include/Include/"/etc/pacman.conf
 sed -i "s/^#\[multilib\]/[multilib]/"/etc/pacman.conf
 
 # Use all cores when compiling from source
-sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/ /etc/makepkg.conf
+sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/" /etc/makepkg.conf
 
 # Network Manager
 echo Y | pacman -S networkmanager
@@ -178,11 +178,11 @@ grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #http
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # Clean up
-rm -f /chrootfile.sh
+#rm -f /chrootfile.sh
 
 # Grab post-install setup script (to run after verifying that things are basically working)
 curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
-mv archsetup.sh /home/"$username"/archsetup.sh
+mv /archsetup.sh /home/"$username"/archsetup.sh
 chown "$username":"$username" /home/"$username"/archsetup.sh
 
 # Good idea to unmount the USB drive before exiting chroot
