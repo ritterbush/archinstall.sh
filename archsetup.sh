@@ -25,6 +25,9 @@ mv ~/Programs/files/dmenu ~/Programs/
 mkdir -p ~/Pictures/Wallpapers
 curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
+# Generate py-wal cache files
+wal -i ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
+
 # xinitrc
 cp -f ~/Programs/files/.xinitrc ~/
 
@@ -44,12 +47,24 @@ cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
 
 # Setup colors and opacity, and these also build and install dwm and dmenu
 # Run again with different numbers or wallpaper to change
+
+cat > ~/more-to-do.sh <<End-of-message
 ~/.local/bin/alacritty-opacity.sh 70
 (echo "$password") | ~/.local/bin/dwm-opacity.sh 70
 (echo "$password") | ~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 # Delete password given by archinstall.sh
 sed -i "s/password=.*/password=password/" /home/"$username"/archsetup.sh
+
+# Clean up
+rm -f ~/more-to-do.sh
+End-of-message
+
+# Make more-to-do.sh executable
+chmod +x ~/more-to-do.sh
+
+# Execute it
+~/more-to-do.sh
 
 (echo "$password") | systemctl reboot
 
