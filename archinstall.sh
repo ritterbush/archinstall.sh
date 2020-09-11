@@ -154,14 +154,14 @@ pacman -Syy
 sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 
 # Add Pacman the videogame character to the pacman progress bar, make pacman more colorful, and see pkg versions
-sed -i "/#VerbosePkgLists/aILoveCandy" /etc/pacman.conf
+sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf
 sed -i "s/^#Color/Color/" /etc/pacman.conf
-sed -i "s/^#VerbosePkgLists/VerbosePkgLists/"/etc/pacman.conf
+sed -i "s/^#VerbosePkgLists/VerbosePkgLists/" /etc/pacman.conf
 
 # Enable 32-bit library support
-sed -i "/^#\[multilib\]/aQQ"/etc/pacman.conf
-sed -i -z "s/QQ\n#Include/Include/"/etc/pacman.conf
-sed -i "s/^#\[multilib\]/[multilib]/"/etc/pacman.conf
+sed -i "/^#\[multilib\]/aQQ" /etc/pacman.conf
+sed -i -z "s/QQ\n#Include/Include/" /etc/pacman.conf
+sed -i "s/^#\[multilib\]/[multilib]/" /etc/pacman.conf
 
 # Use all cores when compiling from source
 sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/" /etc/makepkg.conf
