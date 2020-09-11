@@ -6,7 +6,7 @@ password=password
 username=username
 
 # Update pkg list
-echo "$password" | sudo pacman -Syu
+(echo "$password"; echo "$password") | sudo pacman -Syu
 
 # Xorg server, shell, terminal, editor, browser, varous packages my scripts use, and extras
 (echo; echo; echo) | sudo pacman -S xorg xorg-xinit zsh git alacritty neovim firefox picom xwallpaper sxiv python-pywal neofetch htop
