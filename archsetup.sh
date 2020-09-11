@@ -43,8 +43,9 @@ mkdir -p ~/.config/picom
 cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
 
 # Setup colors and opacity, and these also build and install dwm and dmenu
-~/.local/bin/alacritty-opacity.sh
-~/.local/bin/dwm-opacity.sh
+# Run again with different numbers or wallpaper to change
+~/.local/bin/alacritty-opacity.sh 70
+~/.local/bin/dwm-opacity.sh 70
 ~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 startx
