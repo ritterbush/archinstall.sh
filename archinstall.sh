@@ -166,6 +166,9 @@ sed -i "s/^#\[multilib\]/[multilib]/" /etc/pacman.conf
 # Use all cores when compiling from source
 sed -i "s/^#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(nproc)\"/" /etc/makepkg.conf
 
+# Download database file for 32-bit (multilib) libraries
+pacman -Sy
+
 # Network Manager
 echo Y | pacman -S networkmanager
 systemctl enable NetworkManager
