@@ -188,7 +188,7 @@ curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetu
 mv /archsetup.sh /home/"$username"/archsetup.sh
 chown "$username":"$username" /home/"$username"/archsetup.sh
 chmod +x /home/"$username"/archsetup.sh
-# Provide setup script with password (potential security risk, so be sure to delete file if not/after using it)
+# Provide setup script with password (setup script deletes it if ran--if not using setup script then delete it)
 sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
 
 # Good idea to unmount the USB drive before exiting chroot
