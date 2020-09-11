@@ -2,8 +2,6 @@
 
 # Arch Linux Post install setup script
 
-password=password
-
 # Update pkg list
 (echo "$password"; echo) | sudo pacman -Syu
 
@@ -17,13 +15,15 @@ cd ~/Programs
 # Get my dwm/dmenu desktop environment, various dotfiles, and scripts
 git clone https://github.com/ritterbush/files
 
-# Build and install dwm and dmenu
+# Move dwm and dmenu so colors will be set with py-wal before building
 mv ~/Programs/files/dwm ~/Programs/dwm
 mv ~/Programs/files/dmenu ~/Programs/dmenu
 cd ~/Programs/dwm
-sudo make clean install
 cd ~/Programs/dmenu
-sudo make clean install
+
+# Download Fall wallpaper from Pexels under CC0 license
+makdir -p ~/Pictures/Wallpapers
+curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > fall-autumn-red-season.jpg
 
 # xinitrc
 cp ~/Programs/files/.xinitrc ~/.xinitrc
@@ -41,6 +41,13 @@ cp -r ~/Programs/files/.config ~/.config
 # picom compositor config
 mkdir -p ~/.config/picom
 cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
+
+# Setup colors and opacity, and these also build and install dwm and dmenu
+~/.local/bin/alacritty-opacity.sh
+~/.local/bin/dwm-opacity.sh
+~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
+
+startx
 
 echo done
 
