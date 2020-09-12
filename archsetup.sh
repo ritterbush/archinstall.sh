@@ -17,17 +17,15 @@ curl https://images.pexels.com/photos/33109/fall-autumn-red-season.jpg > ~/Pictu
 
 # Generate py-wal cache files before building dwm and dmenu
 wal -i ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
-sleep 10
+sleep 2
 
 # Directory for building programs from source
 mkdir ~/Programs
 
 # Get my dwm/dmenu desktop environment, various dotfiles, and scripts
 git clone https://github.com/ritterbush/files ~/Programs/
-sleep 5
 echo "$(pwd)"
 echo "$(ls -la ~/Programs)"
-sleep 10
 
 # xinitrc
 cp ~/Programs/.xinitrc ~/.xinitrc
@@ -39,8 +37,8 @@ cp ~/Programs/.zshrc ~/.zshrc
 (echo "$password"; echo /bin/zsh) | chsh 
 
 # shell scripts, neovim config and plugins, alacritty config 
-cp -r ~/Programs/.local ~/.local
-cp -r ~/Programs/.config ~/.config
+cp -r ~/Programs/.local ~/
+cp -r ~/Programs/.config ~/
 
 # picom compositor config
 mkdir -p ~/.config/picom
