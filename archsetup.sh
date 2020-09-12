@@ -73,8 +73,8 @@ color3=${color3% \},}
 sed -i "s/^.*\[SchemeSelHighlight\] =.*/        \[SchemeSelHighlight\] = \{ ${colorNewHighlight}, ${color2} \},/" "$HOME"/Programs/dmenu/config.def.h
 sed -i "s/^.*\[SchemeNormHighlight\] =.*/        \[SchemeNormHighlight\] = \{ ${colorNewHighlight}, ${color3} \},/" "$HOME"/Programs/dmenu/config.def.h
 
-cd "$HOME"/Programs/dwm/ && sudo make clean install
-cd "$HOME"/Programs/dmenu/ && sudo make clean install
+cd "$HOME"/Programs/dwm/ && sudo -S make clean install
+cd "$HOME"/Programs/dmenu/ && sudo -S make clean install
 
 # Delete password given by archinstall.sh
 sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
