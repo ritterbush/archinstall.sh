@@ -54,7 +54,7 @@ cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
 ~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
 # Delete password given by archinstall.sh
-sed -i "s/password=.*/password=password/" /home/"$username"/archsetup.sh
+sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
 
 systemctl reboot
 
