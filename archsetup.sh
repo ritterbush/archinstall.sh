@@ -24,8 +24,6 @@ mkdir ~/Programs
 
 # Get my dwm/dmenu desktop environment, various dotfiles, and scripts
 git clone https://github.com/ritterbush/files ~/Programs/
-echo "$(pwd)"
-echo "$(ls -la ~/Programs)"
 
 # xinitrc
 cp ~/Programs/.xinitrc ~/.xinitrc
@@ -48,6 +46,8 @@ cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
 # Run again with different numbers to change
 
 ~/.local/bin/alacritty-opacity.sh 70
+
+(echo "$password"; echo) | sudo -S pacman -S os-prober
 ~/.local/bin/dwm-opacity.sh 70
 ~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 
