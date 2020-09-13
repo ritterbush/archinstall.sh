@@ -207,6 +207,7 @@ End-of-message
 chmod +x /mnt/chrootfile.sh
 
 # Execute it
-arch-chroot /mnt ./chrootfile.sh
+#arch-chroot /mnt ./chrootfile.sh
+arch-chroot /mnt
 
 echo done
