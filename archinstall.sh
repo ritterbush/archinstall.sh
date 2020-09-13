@@ -105,7 +105,9 @@ timedatectl set-ntp true
 
 mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
 mkdir -p /mnt/efi
+mkdir -p /mnt/home
 mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
+mount /dev/"$disk"5 /mnt/home
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
