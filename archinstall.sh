@@ -95,7 +95,7 @@ timedatectl set-ntp true
 #sleep 2
 
 # Create efi and root partitions; efi is 512MB and root is rest of drive
-#(echo n; echo; echo; echo +512M; echo t; echo; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
+#(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
 #sleep 2
 
 # Make file systems and mount
