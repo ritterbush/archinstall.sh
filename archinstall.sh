@@ -1,8 +1,8 @@
 #!/bin/sh
 
 disk=sda # Wipes this disk '/dev/disk'
-efipart=sda1 # Match disk above but keep 1
-rootpart=sda2 # Match disk above but keep 2
+efipart="$disk"1 # Match disk above but keep 1
+rootpart="$disk"2 # Match disk above but keep 2
 timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
 cpu=amd # Must be amd or intel or other
 hostname=arch
@@ -75,32 +75,34 @@ while getopts ":u:p:h:d:t:s:aio" opt; do
   esac
 done
 
+echo "$efipart"
+echo "$rootpart"
+sleep 5
+
 # Update System Clock
 timedatectl set-ntp true
 
 # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
-ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
-sleep 1
-ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
-sleep 1
-ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
-sleep 1
+#ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
+#sleep 1
+#ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
+#sleep 1
+#ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
+#sleep 1
 
 # Create GPT partition table
-(echo g; echo w) | fdisk /dev/"$disk"
-sleep 2
+#(echo g; echo w) | fdisk /dev/"$disk"
+#sleep 2
 
 # Create efi and root partitions; efi is 512MB and root is rest of drive
-(echo n; echo; echo; echo +512M; echo t; echo; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
-sleep 2
+#(echo n; echo; echo; echo +512M; echo t; echo; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
+#sleep 2
 
 # Make file systems and mount
-mkfs.fat -F32 /dev/"$efipart"
-mkfs.ext4 /dev/"$rootpart"
+#mkfs.fat -F32 /dev/"$efipart"
+#mkfs.ext4 /dev/"$rootpart"
 mkdir -p /mnt/efi
-#mkdir -p /mnt/boot
-#mount /dev/"$efipart" /mnt/boot
-mount /dev/"$efipart" /mnt/efi
+mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 mount /dev/"$rootpart" /mnt
 
 pacman -Syy
