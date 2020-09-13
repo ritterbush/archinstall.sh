@@ -75,39 +75,34 @@ while getopts ":u:p:h:d:t:s:aio" opt; do
   esac
 done
 
-echo "$efipart"
-echo "$rootpart"
-echo "#(lsblk)"
-sleep 5
-
 # Update System Clock
 timedatectl set-ntp true
 
 # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
-#ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
-#sleep 1
-#ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
-#sleep 1
-#ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
-#sleep 1
+ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
+sleep 1
+ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
+sleep 1
+ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
+sleep 1
 
 # Create GPT partition table
-#(echo g; echo w) | fdisk /dev/"$disk"
-#sleep 2
+(echo g; echo w) | fdisk /dev/"$disk"
+sleep 2
 
 # Create efi and root partitions; efi is 512MB and root is rest of drive
-#(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
-#sleep 2
+(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
+sleep 2
 
 # Make file systems and mount
-#mkfs.fat -F32 /dev/"$efipart"
-#mkfs.ext4 /dev/"$rootpart"
+mkfs.fat -F32 /dev/"$efipart"
+mkfs.ext4 /dev/"$rootpart"
 
 mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
 mkdir -p /mnt/efi
-mkdir -p /mnt/home
+#mkdir -p /mnt/home Extending home functionality is on the To Do list
 mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
-mount /dev/"$disk"5 /mnt/home
+#mount /dev/"$disk"5 /mnt/home
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
@@ -118,14 +113,8 @@ sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer =
 # Install just the bare minimum until chroot
 pacstrap /mnt base
 
-echo "$(lsblk)"
-sleep 5
 # Generate fstab
-echo $(genfstab -U /mnt)
-sleep 5
 genfstab -U /mnt >> /mnt/etc/fstab
-cat /mnt/etc/fstab
-sleep 5
 
 # Create the chroot script that executes inside the new Arch system 
 cat > /mnt/chrootfile.sh <<End-of-message
