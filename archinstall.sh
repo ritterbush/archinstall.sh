@@ -114,6 +114,8 @@ sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer =
 # Install just the bare minimum until chroot
 pacstrap /mnt base
 
+echo "$(lsblk)"
+sleep 5
 # Generate fstab
 echo $(genfstab -U /mnt)
 sleep 5
