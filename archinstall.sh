@@ -115,7 +115,11 @@ sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer =
 pacstrap /mnt base
 
 # Generate fstab
+echo $(genfstab -U /mnt)
+sleep 5
 genfstab -U /mnt >> /mnt/etc/fstab
+cat /mnt/etc/fstab
+sleep 5
 
 # Create the chroot script that executes inside the new Arch system 
 cat > /mnt/chrootfile.sh <<End-of-message
