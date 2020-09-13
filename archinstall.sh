@@ -77,6 +77,7 @@ done
 
 echo "$efipart"
 echo "$rootpart"
+echo "#(lsblk)"
 sleep 5
 
 # Update System Clock
@@ -101,9 +102,10 @@ timedatectl set-ntp true
 # Make file systems and mount
 #mkfs.fat -F32 /dev/"$efipart"
 #mkfs.ext4 /dev/"$rootpart"
+
+mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
 mkdir -p /mnt/efi
 mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
-mount /dev/"$rootpart" /mnt
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
