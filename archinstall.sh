@@ -1,6 +1,7 @@
 #!/bin/sh
 
-disk=sda # Wipes this disk '/dev/disk'
+disk=sda # Installs on disk '/dev/disk'
+wipe=false # Wipes disk clean if -w option used
 efipart="$disk"1 # Match disk above but 1
 rootpart="$disk"2 # Match disk above but 2
 homepart="$disk"3 # Match disk above but 3
@@ -12,9 +13,15 @@ username=paul
 password=password
 
 <<COMMENT
-        This script installs Arch Linux while making several assumptions: one, it assumes that the disk named in the disk variable above will be WIPED CLEAN.
-        It also installs only for UEFI systems. It also provides USA specific repository mirrors. It also assumes that a network is connected and in use 
-        once booted into the live environment. It also makes no swap partition, uses ext4, and probably makes more assumptions of this sort. Nothing too weird.
+        This script installs Arch Linux while making several assumptions: one, it installs only for UEFI systems. 
+        It also provides USA specific repository mirrors (I will probably change this to something more general). 
+        It also assumes that a network is connected and in use and that an Arch live environment is already booted into.
+        
+        It no longer assumes that the disk will be wiped clean and partitions created and mounted. For this, which makes only
+        an efi partition of 512M, a root partition of 32G, and a home partition for the rest, you need to specify the -w (for wipe clean)
+        option. Otherwise, it is assumeed that the partitions are created, that root is mounted to /mnt, and that any needed additional 
+        folders are created therein with their respective partition mounts. From there it installs a very minimal base, base-devel, linux, 
+        linux-firmware Arch Linux install, or a full install (via the -f option) of my own setup of ComfyOS
         
         I've added rudimentary getopts support, so now you can use any or all of the following options to change the above starting variables: 
         
@@ -53,7 +60,7 @@ COMMENT
 # -u username -p password -h -hostname -d disk -t timezone -s staticip
 # Also use -a, or -i for AMD or Intel cpu microcode
 
-while getopts ":u:p:h:d:t:s:ai" opt; do
+while getopts ":u:p:h:d:t:s:aiw" opt; do
   case ${opt} in
     u ) username=${OPTARG}
       ;;
@@ -71,12 +78,16 @@ while getopts ":u:p:h:d:t:s:ai" opt; do
       ;;
     i ) cpu=intel
       ;;
+    w ) wipe=true
+      ;;
   esac
 done
 
 # Update System Clock
 timedatectl set-ntp true
 
+if [ $wipe ] # -w option
+then
 # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
 ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
 sleep 1
@@ -105,6 +116,8 @@ mkdir -p /mnt/efi
 mkdir -p /mnt/home
 mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 mount /dev/"$homepart" /mnt/home
+fi #end of -w option
+
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
