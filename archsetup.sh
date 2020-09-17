@@ -9,7 +9,7 @@ username=username
 echo "$password" | sudo -S pacman -Syu
 
 # Xorg server, shell, terminal, editor, browser, varous packages my scripts use, and extras
-(echo; echo; echo) | sudo pacman -S xorg xorg-xinit zsh git alacritty neovim firefox picom feh sxiv python-pywal neofetch htop
+(echo; echo; echo) | sudo pacman -S xorg xorg-xinit zsh git alacritty neovim firefox picom feh sxiv ttf-linux-libertine python-pywal neofetch htop
 
 # Download Fall wallpaper from Pexels under CC0 license
 mkdir -p ~/Pictures/Wallpapers
