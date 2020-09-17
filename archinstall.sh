@@ -4,7 +4,7 @@ disk=sda # Wipes this disk '/dev/disk'
 efipart="$disk"1 # Match disk above but keep 1
 rootpart="$disk"2 # Match disk above but keep 2
 timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
-cpu=amd # Must be amd or intel or other
+cpu=other # Must be amd or intel or other
 hostname=arch
 staticip=127.0.1.1
 username=paul
@@ -50,7 +50,7 @@ COMMENT
 # I've added rudimentary getopts support
 # So now you can use any or all of the following options: 
 # -u username -p password -h -hostname -d disk -t timezone -s staticip
-# Also use -a, or -i, or -o alone (at the end is fine) for AMD, Intel or other cpu support
+# Also use -a, or -i for AMD or Intel cpu microcode
 
 while getopts ":u:p:h:d:t:s:aio" opt; do
   case ${opt} in
@@ -69,8 +69,6 @@ while getopts ":u:p:h:d:t:s:aio" opt; do
     a ) cpu=amd
       ;;
     i ) cpu=intel
-      ;;
-    o ) cpu=other
       ;;
   esac
 done
