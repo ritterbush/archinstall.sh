@@ -176,8 +176,8 @@ systemctl enable NetworkManager
 
 # Bootloader install and setup
 echo Y | pacman -S grub efibootmgr
-mkdir /efi
-mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
+#mkdir /efi
+#mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
