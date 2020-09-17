@@ -1,8 +1,9 @@
 #!/bin/sh
 
 disk=sda # Wipes this disk '/dev/disk'
-efipart="$disk"1 # Match disk above but keep 1
-rootpart="$disk"2 # Match disk above but keep 2
+efipart="$disk"1 # Match disk above but 1
+rootpart="$disk"2 # Match disk above but 2
+homepart="$disk"3 # Match disk above but 3
 timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
 cpu=other # Must be other or amd or intel
 hostname=arch
@@ -77,6 +78,8 @@ done
 timedatectl set-ntp true
 
 # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
+ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
+sleep 1
 ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
 sleep 1
 ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
@@ -88,19 +91,20 @@ sleep 1
 (echo g; echo w) | fdisk /dev/"$disk"
 sleep 2
 
-# Create efi and root partitions; efi is 512MB and root is rest of drive
-(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
+# Create efi, root, and home partitions; efi is 512MB, root 32GB, and home is rest of drive
+(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo +32G; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
 sleep 2
 
 # Make file systems and mount
 mkfs.fat -F32 /dev/"$efipart"
 mkfs.ext4 /dev/"$rootpart"
+mkfs.ext4 /dev/"$homepart"
 
 mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
 mkdir -p /mnt/efi
-#mkdir -p /mnt/home Extending home functionality is on the To Do list
+mkdir -p /mnt/home
 mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
-#mount /dev/"$disk"5 /mnt/home
+mount /dev/"$homepart" /mnt/home
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
