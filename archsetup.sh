@@ -79,7 +79,5 @@ cd ~/Programs/dmenu/ && sudo -S make clean install
 # Delete password given by archinstall.sh
 sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
 
-systemctl reboot
-
 echo done
 
