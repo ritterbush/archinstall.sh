@@ -9,7 +9,7 @@ username=username
 echo "$password" | sudo -S pacman -Syu
 
 # Xorg server, shell, terminal, editor, browser, varous packages my scripts use, and extras
-(echo; echo; echo) | sudo pacman -S xorg xorg-xinit zsh git alacritty neovim firefox picom xwallpaper sxiv python-pywal neofetch htop
+(echo; echo; echo) | sudo pacman -S xorg xorg-xinit zsh git alacritty neovim firefox picom feh sxiv python-pywal neofetch htop
 
 # Download Fall wallpaper from Pexels under CC0 license
 mkdir -p ~/Pictures/Wallpapers
@@ -50,7 +50,7 @@ cp /etc/xdg/picom.conf.example ~/.config/picom/picom.conf
 sed -i "s/static const unsigned int baralpha = .*/static const unsigned int baralpha = 0xb3;/" ~/Programs/dwm/config.def.h
 #~/.local/bin/wallpaper-and-colors.sh ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 sed -i "5s|.*|filepath=/home/${username}/Pictures/Wallpapers/fall-autumn-red-season.jpg|" ~/.local/bin/wallpaper-and-colors.sh
-xwallpaper --zoom ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
+#xwallpaper --zoom ~/Pictures/Wallpapers/fall-autumn-red-season.jpg
 sed -i "s/static const char norm_fg\[\] = .*/$(sed -n 1p ~/.cache/wal/colors-wal-dwm.h)/" ~/Programs/dwm/config.def.h
 sed -i "s/static const char norm_bg\[\] = .*/$(sed -n 2p ~/.cache/wal/colors-wal-dwm.h)/" ~/Programs/dwm/config.def.h
 sed -i "s/static const char norm_border\[\] = .*/$(sed -n 3p ~/.cache/wal/colors-wal-dwm.h)/" ~/Programs/dwm/config.def.h
