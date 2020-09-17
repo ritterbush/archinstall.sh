@@ -4,7 +4,7 @@ disk=sda # Wipes this disk '/dev/disk'
 efipart="$disk"1 # Match disk above but keep 1
 rootpart="$disk"2 # Match disk above but keep 2
 timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
-cpu=other # Must be amd or intel or other
+cpu=other # Must be other or amd or intel
 hostname=arch
 staticip=127.0.1.1
 username=paul
@@ -52,7 +52,7 @@ COMMENT
 # -u username -p password -h -hostname -d disk -t timezone -s staticip
 # Also use -a, or -i for AMD or Intel cpu microcode
 
-while getopts ":u:p:h:d:t:s:aio" opt; do
+while getopts ":u:p:h:d:t:s:ai" opt; do
   case ${opt} in
     u ) username=${OPTARG}
       ;;
