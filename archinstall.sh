@@ -86,7 +86,7 @@ done
 # Update System Clock
 timedatectl set-ntp true
 
-if [ $wipe ] # -w option
+if [ $wipe = true ] # -w option
 then
 # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
 ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
