@@ -87,7 +87,7 @@ while getopts ":u:p:h:d:t:s:aiwf" opt; do
       ;;
     w ) wipe=true
       ;;
-    f ) wipe=true
+    f ) full=true
       ;;
   esac
 done
