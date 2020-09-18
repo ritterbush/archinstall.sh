@@ -208,7 +208,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # Clean up
 rm -f /chrootfile.sh
 
-if [ $full = true ] # -w option
+if [ $full = true ] # -f option
 then
 # Grab post-install setup script (to run after verifying that things are basically working)
 curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
@@ -224,7 +224,7 @@ echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.s
 
 # Delete password in it after running it
 sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
-fi
+fi # End of -f option
 
 # Good idea to unmount the USB drive before exiting chroot
 umount -a
