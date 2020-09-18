@@ -1,16 +1,23 @@
 #!/bin/sh
 
-disk=sda # Installs on disk '/dev/disk'
-wipe=false # Wipes disk clean if -w option used
-efipart="$disk"1 # Match disk above but 1
+# Options: -u username -p password -h -hostname -d disk -t timezone -s staticip
+# Any options not specified will use the defaults below
+# Option -w will wipe "disk", create new partitions on "disk", and install on "disk" .
+# Without -w, it is assumed that you have already partitioned and mounted your drives correctly according to a uefi system
+# Options -a or -i will install AMD or Intel cpu microcode (pick one or neither to install no microcode)
+
+wipe=false # If -w option is used, wipes disk clean and makes partitions according to the below variables
+disk=sda # Wipes the disk '/dev/disk', can be changed with -d; use the letters that follow /dev/ and that specify the disk to wipe
+efipart="$disk"1 # Matches disk above but 1
 rootpart="$disk"2 # Match disk above but 2
 homepart="$disk"3 # Match disk above but 3
-timezone=America/Los_Angeles # To see options, ls /usr/share/zoneinfo
+full=false # If -f option used, fully install ComfyOS desktop, oterwise do a basic installation 
+timezone=America/Los_Angeles # Change with -t. To see options: ls /usr/share/zoneinfo
 cpu=other # Must be other or amd or intel
-hostname=arch
-staticip=127.0.1.1
-username=paul
-password=password
+hostname=arch # Change with -h
+staticip=127.0.1.1 # Change with -s
+username=paul # Change with -u
+password=password # Change with -p
 
 <<COMMENT
         This script installs Arch Linux while making several assumptions: one, it installs only for UEFI systems. 
@@ -60,7 +67,7 @@ COMMENT
 # -u username -p password -h -hostname -d disk -t timezone -s staticip
 # Also use -a, or -i for AMD or Intel cpu microcode
 
-while getopts ":u:p:h:d:t:s:aiw" opt; do
+while getopts ":u:p:h:d:t:s:aiwf" opt; do
   case ${opt} in
     u ) username=${OPTARG}
       ;;
@@ -79,6 +86,8 @@ while getopts ":u:p:h:d:t:s:aiw" opt; do
     i ) cpu=intel
       ;;
     w ) wipe=true
+      ;;
+    f ) wipe=true
       ;;
   esac
 done
@@ -199,6 +208,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # Clean up
 rm -f /chrootfile.sh
 
+if [ $full = true ] # -w option
+then
 # Grab post-install setup script (to run after verifying that things are basically working)
 curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
 mv /archsetup.sh /home/"$username"/archsetup.sh
@@ -213,6 +224,7 @@ echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.s
 
 # Delete password in it after running it
 sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
+fi
 
 # Good idea to unmount the USB drive before exiting chroot
 umount -a
