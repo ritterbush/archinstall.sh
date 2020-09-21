@@ -162,9 +162,9 @@ echo "$hostname" > /etc/hostname
 # Create hosts file
 echo -e '127.0.0.1\tlocalhost\n::1\t\tlocalhost\n'"$staticip\t""$hostname"'.localdomain\t'"$hostname" | cat >> /etc/hosts
 
-# Give root a password, add username to wheel, audio, and video groups and give username same password as root
+# Give root a password, add username to wheel, audio, etc. groups and give username same password as root
 (echo "$password"; echo "$password") | passwd
-useradd -m -G wheel,audio,video "$username"
+useradd -m -G wheel,audio,optical,disk,storage,video "$username"
 (echo "$password"; echo "$password") | passwd "$username"
 
 # Update available packages list
