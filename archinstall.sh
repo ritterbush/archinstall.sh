@@ -211,19 +211,21 @@ rm -f /chrootfile.sh
 if [ $full = true ] # -f option
 then
 # Grab post-install setup script (to run after verifying that things are basically working)
-curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
+# OLD curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
+curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > archsetup.sh
 mv /archsetup.sh /home/"$username"/archsetup.sh
 chown "$username":"$username" /home/"$username"/archsetup.sh
 chmod +x /home/"$username"/archsetup.sh
 # Provide setup script with username and password (this given password is deleted below after script is run)
-sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
-sed -i "s/username=username/username=${username}/" /home/"$username"/archsetup.sh
+# OLD sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
+# OLD sed -i "s/username=username/username=${username}/" /home/"$username"/archsetup.sh
 
 #Try running it as username
-echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh"
+# OLD echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh"
+echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh -c -p ${password}"
 
 # Delete password in it after running it
-sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
+# OLD sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
 fi # End of -f option
 
 # Good idea to unmount the USB drive before exiting chroot
