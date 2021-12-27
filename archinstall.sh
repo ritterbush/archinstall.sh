@@ -39,6 +39,9 @@ efipart="$disk"1 # Same name as disk above but with 1 at the end
 rootpart="$disk"2 # Same name as disk above but 2 instead of 1 at the end
 homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
 
+# My own personal preference options
+mirrors=default
+
 <<COMMENT
         This script installs Arch Linux while making several assumptions: one, it installs only for UEFI systems. 
         It also provides USA specific repository mirrors (I will probably change this to something more general). 
@@ -163,6 +166,10 @@ while [ -n "$1" ]; do
         --help|-h)
             show_usage
             ;;
+        --usa-sw-mirrors)
+            mirrors='usa-sw'
+            shift
+            ;;
         *)
             echo "Unknown option $1"
             show_usage
@@ -218,8 +225,8 @@ fi #end of -w option
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
 
-# Send good USA sites to the top of the  mirrorlist
-sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
+# Personal preference with --usa-sw-mirrors flag: Send good USA sites to the top of the  mirrorlist
+[ $mirrors = 'usa-sw' ] && sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
 
 # Install just the bare minimum until chroot
 pacstrap /mnt base
