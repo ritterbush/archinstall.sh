@@ -11,7 +11,7 @@ disk=sda # Wipes the disk '/dev/disk', can be changed with -d; use the letters t
 efipart="$disk"1 # Matches disk above but 1
 rootpart="$disk"2 # Match disk above but 2
 homepart="$disk"3 # Match disk above but 3
-full=false # If -f option used, fully install ComfyOS desktop, oterwise do a basic installation 
+full=false # If -f option used, fully install ComfyOS desktop, otherwise do a basic installation 
 timezone=America/Los_Angeles # Change with -t. To see options: ls /usr/share/zoneinfo
 cpu=other # Must be other or amd or intel
 hostname=arch # Change with -h
@@ -97,36 +97,35 @@ timedatectl set-ntp true
 
 if [ $wipe = true ] # -w option
 then
-# Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
-ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
-sleep 1
-ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
-sleep 1
-ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
-sleep 1
-ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
-sleep 1
+    # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
+    ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
+    sleep 1
+    ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
+    sleep 1
+    ls /dev/"$efipart" > /dev/null 2>&1 && wipefs --all --force /dev/"$efipart"
+    sleep 1
+    ls /dev/"$disk" > /dev/null 2>&1 && wipefs --all --force /dev/"$disk"
+    sleep 1
 
-# Create GPT partition table
-(echo g; echo w) | fdisk /dev/"$disk"
-sleep 2
+    # Create GPT partition table
+    (echo g; echo w) | fdisk /dev/"$disk"
+    sleep 2
 
-# Create efi, root, and home partitions; efi is 512MB, root 32GB, and home is rest of drive
-(echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo +32G; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
-sleep 2
+    # Create efi, root, and home partitions; efi is 512MB, root 32GB, and home is rest of drive
+    (echo n; echo; echo; echo +512M; echo t; echo 1; echo n; echo; echo; echo +32G; echo n; echo; echo; echo; echo p; echo w) | fdisk /dev/"$disk"
+    sleep 2
 
-# Make file systems and mount
-mkfs.fat -F32 /dev/"$efipart"
-mkfs.ext4 /dev/"$rootpart"
-mkfs.ext4 /dev/"$homepart"
+    # Make file systems and mount
+    mkfs.fat -F32 /dev/"$efipart"
+    mkfs.ext4 /dev/"$rootpart"
+    mkfs.ext4 /dev/"$homepart"
 
-mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
-mkdir -p /mnt/efi
-mkdir -p /mnt/home
-mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
-mount /dev/"$homepart" /mnt/home
+    mount /dev/"$rootpart" /mnt # For a proper fstab entry, mount root partition first and then create additional files and mount any needed partitions to them
+    mkdir -p /mnt/efi
+    mkdir -p /mnt/home
+    mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
+    mount /dev/"$homepart" /mnt/home
 fi #end of -w option
-
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
@@ -142,7 +141,6 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Create the chroot script that executes inside the new Arch system 
 cat > /mnt/chrootfile.sh <<End-of-message
-
 # Set Timezone
 ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime
 hwclock --systohc
@@ -210,28 +208,27 @@ rm -f /chrootfile.sh
 
 if [ $full = true ] # -f option
 then
-# Grab post-install setup script (to run after verifying that things are basically working)
-# OLD curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
-curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > archsetup.sh
-mv /archsetup.sh /home/"$username"/archsetup.sh
-chown "$username":"$username" /home/"$username"/archsetup.sh
-chmod +x /home/"$username"/archsetup.sh
-# Provide setup script with username and password (this given password is deleted below after script is run)
-# OLD sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
-# OLD sed -i "s/username=username/username=${username}/" /home/"$username"/archsetup.sh
+	# Grab post-install setup script (to run after verifying that things are basically working)
+	# OLD curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archsetup.sh > archsetup.sh
+	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > archsetup.sh
+	mv /archsetup.sh /home/"$username"/archsetup.sh
+	chown "$username":"$username" /home/"$username"/archsetup.sh
+	chmod +x /home/"$username"/archsetup.sh
+	# Provide setup script with username and password (this given password is deleted below after script is run)
+	# OLD sed -i "s/password=password/password=${password}/" /home/"$username"/archsetup.sh
+	# OLD sed -i "s/username=username/username=${username}/" /home/"$username"/archsetup.sh
 
-#Try running it as username
-# OLD echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh"
-echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh -c -p ${password}"
+	#Try running it as username
+	# OLD echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh"
+	echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/archsetup.sh -c -p ${password}"
 
-# Delete password in it after running it
-# OLD sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
+	# Delete password in it after running it
+	# OLD sed -i "s/^password=.*/password=password/" /home/"$username"/archsetup.sh
 fi # End of -f option
 
-# Good idea to unmount the USB drive before exiting chroot
+# Good idea to unmount drives before exiting chroot
 umount -a
 exit
-
 End-of-message
 
 # Make that script executable
@@ -239,6 +236,5 @@ chmod +x /mnt/chrootfile.sh
 
 # Execute it
 arch-chroot /mnt ./chrootfile.sh
-#arch-chroot /mnt
 
 echo done
