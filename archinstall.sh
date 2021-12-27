@@ -1,28 +1,43 @@
 #!/bin/sh
 
-# Options: -u username -p password -h -hostname -d disk -t timezone -s staticip
-# Any options not specified will use the defaults below
-# Option -w will wipe "disk", create new partitions on "disk", and install on "disk" .
-# Without -w, it is assumed that you have already partitioned and mounted your drives correctly according to a uefi system
-# Options -a or -i will install AMD or Intel cpu microcode (pick one or neither to install no microcode)
+# Run with -h option to see full usage and checklist before installing via script
 
 show_usage(){
     printf "Usage:\n\n  $0 [options [parameters]]\n"
     printf "\n"
-    printf "Installs Arch Linux on UEFI systems.\n"
+    printf "Installs Arch Linux on UEFI systems. See Checklist after Options.\n"
     printf "\n"
     printf "Options [parameters]:\n"
     printf "\n"
     printf "  -u|--username [username]   Specify username; if special characters are\n                             used use single quotes.\n"
     printf "  -p|--password [password]   Specify password; if special characters are\n                             used use single quotes.\n"
     printf "  -o|--hostname [hostname]   Specify hostname:~ the name of the computer\n                             of this operating system.\n"
-    printf "  -t|--timezone [timezone]   Specify timezone; use single quotes.\n"    printf "  -s|--staticip [staticip]   Specify local static ip address (setup with\n                             your router). Do not use if no local static\n                             ip address has been set up. Use single quotes.\n"
+    printf "  -t|--timezone [timezone]   Specify timezone; use single quotes.\n"    
+    printf "  -s|--staticip [staticip]   Specify local static ip address (setup with\n                             your router). Do not use if no local static\n                             ip address has been set up. Use single quotes.\n"
     printf "  -f|--full                  Install ComfyOS setup after basic Arch\n                             installation.\n"
     printf "  -a|--amdcpu                Use amd cpu microcode.\n"  
     printf "  -i|--intelcpu              Use intel cpu microcode.\n"
     printf "  --wipe-disk                Wipes the disk (ALL DATA ERASED!) of\n                             /dev/--diskname specified by -d|--diskname\n"
     printf "  -d|--diskname [diskname]   Specify diskname to be wiped; e.g.\n                             'sdc'. Do not include /dev/. \n"  
     printf "  -h|--help                  Print this help.\n"
+    printf "\n"
+    printf "Checklist:\n"
+    printf "\n"
+    printf "        Download latest Arch ISO from https://archlinux.org/download/\n             
+        Verify PGP Signature and/or Checksums of downloaded Arch ISO\n
+        Create bootable\n
+        Boot into live environment\n
+        Set keyboard layout if it is not US\n
+        Confirm UEFI mode with: ls /sys/firmware/efi/efivars\n
+        Use ping to ensure internet connection\n
+        Configure network router if desired (e.g. to assign a static IP)\n                      set static ip option -s accordingly if so\n
+        Get this script with curl:\n                      curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archinstall.sh > archinstall.sh\n
+        Alternatively, mkdir and then mount a USB device with this script\n                     to /mnt/usb (use lsblk to see device paths)\n
+        Give the script executable permissions with:\n                     chmod +x /path/to/archinstall.sh\n                     (Use pwd command to see current directory)\n
+        If using --wipe-disk, run lsblk and confirm the correct disk to wipe\n                     This option will make an efi partition of 512M, a root\n                     partition of 32G, and a home partition with the remaining \n                    space\n
+        If not using --wipe-disk, mount the root partition to /mnt then\n                     mkdir -p /mnt/efi and mount the efi drive to that location;\n                     create further directories and mount drives to them if\n                     needed\n
+        View the script with the less command and install a text editor\n                     (pacman -S nano vim) to edit it\n
+        Run the script with the proper options and parameters with:\n                      ./archinstall.sh options [parameters]\n"
 exit
 }
 
@@ -41,49 +56,6 @@ homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
 
 # My own personal preference options
 mirrors=default
-
-<<COMMENT
-        This script installs Arch Linux while making several assumptions: one, it installs only for UEFI systems. 
-        It also provides USA specific repository mirrors (I will probably change this to something more general). 
-        It also assumes that a network is connected and in use and that an Arch live environment is already booted into.
-        
-        It no longer assumes that the disk will be wiped clean and partitions created and mounted. For this, which makes only
-        an efi partition of 512M, a root partition of 32G, and a home partition for the rest, you need to specify the -w (for wipe clean)
-        option. Otherwise, it is assumeed that the partitions are created, that root is mounted to /mnt, and that any needed additional 
-        folders are created therein with their respective partition mounts. From there it installs a very minimal base, base-devel, linux, 
-        linux-firmware Arch Linux install, or a full install (via the -f option) of my own setup of ComfyOS
-        
-        I've added rudimentary getopts support, so now you can use any or all of the following options to change the above starting variables: 
-        
-        -u username -p password -h -hostname -d disk -t timezone -s staticip
-         
-        Also use -a, or -i, or -o alone (at the end is fine) for AMD, Intel or other cpu support.
-        
-
-        Checklist:
-        Verify Signature/Checksums of downloaded Arch ISO;
-        Create bootable;
-        Boot into live environment;
-        Set keyboard layout if it is not US;
-        Confirm UEFI mode with: ls /sys/firmware/efi/efivars;
-        Use lsblk to confirm that the disk variable set above matches;
-        Use ping to ensure internet connection;
-        Configure network router if desired (e.g. to assign a static IP--set static ip variable accordingly if so);
-        Curl this script with the full https address to the raw file (curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archinstall.sh > archinstall.sh), 
-        or, alternatively, mkdir and then mount a USB device with this script to /mnt/usb (use lsblk to see device paths);
-        Give the script executable permissions with chmod +x /path/to/archinstall.sh (type pwd to see current directory);
-        
-        You can view the script with the less command (vim keys to navigate), and
-        change any initial variables with sed -i--e.g., sed -i 's/password=password/password=supersecret' /path/to/archinstall.sh  , 
-        or you could edit it first with a text editor like a sane person, and even copy it to your own site and curl it.
-        
-        LICENSE: MIT, GPLv3, or Abandonware, whichever you prefer
-        WARRANTY: Zero, and I am sorry about what that did there
-        
-        Run script:
-        /path/to/archinstall.sh
-
-COMMENT
 
 while [ -n "$1" ]; do
     case "$1" in
