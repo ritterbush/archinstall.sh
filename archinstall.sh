@@ -151,18 +151,11 @@ done
 
 [ $wipe = true ] && [ $disk = none ] && echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit
 
-echo "Past wipefs + disk check"
-exit 0
-exit 1
-exit 0
-exit;exit;exit
 # Update System Clock
 timedatectl set-ntp true
 
 if [ $wipe = true ] # -w option
 then
-
-    exit 0	
 
     # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
     ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
