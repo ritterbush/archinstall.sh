@@ -79,13 +79,13 @@ while [ -n "$1" ]; do
                 exit
             fi
             ;;
-        --hostname|-h)
+        --hostname|-o)
             if [ -n "$2"  ]
             then
                 hostname="$2"
                 shift 2
             else
-                echo "-h option requires a hostname"
+                echo "-o option requires a hostname"
                 exit
             fi
             ;;
