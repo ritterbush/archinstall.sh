@@ -12,32 +12,32 @@ show_usage(){
     printf "  -u|--username [username]   Specify username; if special characters are\n                             used use single quotes.\n"
     printf "  -p|--password [password]   Specify password; if special characters are\n                             used use single quotes.\n"
     printf "  -o|--hostname [hostname]   Specify hostname:~ the name of the computer\n                             of this operating system.\n"
-    printf "  -t|--timezone [timezone]   Specify timezone; use single quotes.\n"    
+    printf "  -t|--timezone [timezone]   Specify timezone; use single quotes.\n                             To see options: ls /usr/share/zoneinfo\n"
     printf "  -s|--staticip [staticip]   Specify local static ip address (setup with\n                             your router). Do not use if no local static\n                             ip address has been set up. Use single quotes.\n"
     printf "  -f|--full                  Install ComfyOS setup after basic Arch\n                             installation.\n"
-    printf "  -a|--amdcpu                Use amd cpu microcode.\n"  
+    printf "  -a|--amdcpu                Use amd cpu microcode.\n"
     printf "  -i|--intelcpu              Use intel cpu microcode.\n"
     printf "  --wipe-disk                Wipes the disk (ALL DATA ERASED!) of\n                             /dev/--diskname specified by -d|--diskname\n"
-    printf "  -d|--diskname [diskname]   Specify diskname to be wiped; e.g.\n                             'sdc'. Do not include /dev/. \n"  
+    printf "  -d|--diskname [diskname]   Specify diskname to be wiped; e.g.\n                             'sdc'. Do not include /dev/. \n"
     printf "  -h|--help                  Print this help.\n"
     printf "\n"
     printf "Checklist:\n"
     printf "\n"
-    printf "        Download latest Arch ISO from https://archlinux.org/download/\n             
+    printf "        Download latest Arch ISO from https://archlinux.org/download/\n
         Verify PGP Signature and/or Checksums of downloaded Arch ISO\n
         Create bootable\n
         Boot into live environment\n
         Set keyboard layout if it is not US\n
         Confirm UEFI mode with: ls /sys/firmware/efi/efivars\n
         Use ping to ensure internet connection\n
-        Configure network router if desired (e.g. to assign a static IP)\n                      set static ip option -s accordingly if so\n
-        Get this script with curl:\n                      curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archinstall.sh > archinstall.sh\n
+        Configure network router if desired (e.g. to assign a static IP)\n                     set static ip option -s accordingly if so\n
+        Get this script with curl:\n                     curl https://raw.githubusercontent.com/ritterbush/archinstall.sh/master/archinstall.sh > archinstall.sh\n
         Alternatively, mkdir and then mount a USB device with this script\n                     to /mnt/usb (use lsblk to see device paths)\n
         Give the script executable permissions with:\n                     chmod +x /path/to/archinstall.sh\n                     (Use pwd command to see current directory)\n
-        If using --wipe-disk, run lsblk and confirm the correct disk to wipe\n                     This option will make an efi partition of 512M, a root\n                     partition of 32G, and a home partition with the remaining \n                    space\n
+        If using --wipe-disk, run lsblk and confirm the correct disk to wipe\n                     This option will make an efi partition of 512M, a root\n                     partition of 32G, and a home partition with the remaining \n                     space\n
         If not using --wipe-disk, mount the root partition to /mnt then\n                     mkdir -p /mnt/efi and mount the efi drive to that location;\n                     create further directories and mount drives to them if\n                     needed\n
         View the script with the less command and install a text editor\n                     (pacman -S nano vim) to edit it\n
-        Run the script with the proper options and parameters with:\n                      ./archinstall.sh options [parameters]\n"
+        Run the script with the proper options and parameters with:\n                     ./archinstall.sh options [parameters]\n"
 exit
 }
 
