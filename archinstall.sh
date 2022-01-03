@@ -129,6 +129,9 @@ while [ -n "$1" ]; do
             if [ -n "$2"  ]
             then
                 disk="$2"
+                efipart="$disk"1 # Same name as disk above but with 1 at the end
+                rootpart="$disk"2 # Same name as disk above but 2 instead of 1 at the end
+                homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
                 shift 2
             else
                 echo "-d option requires a diskname"
