@@ -267,9 +267,6 @@ echo Y | pacman -S grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# Clean up
-rm -f /chrootfile.sh
-
 if [ $full = true ] # -f option
 then
 	# Grab post-install setup script (to run after verifying that things are basically working)
@@ -280,8 +277,10 @@ then
 
 	# Running it as username
 	echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/setup-arch-based.sh -c -p ${password}"
-
 fi # End of -f option
+
+# Clean up
+rm -f /chrootfile.sh
 
 # Good idea to unmount drives before exiting chroot
 umount -a
