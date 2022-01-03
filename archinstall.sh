@@ -153,7 +153,7 @@ while [ -n "$1" ]; do
 done
 
 # If wipe disk option used, check a diskname has been given
-[ $wipe = true ] && [ $disk = none ] && $(echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit)
+[ $wipe = true ] && [ $disk = none ] && echo "Specify diskname with -d|--diskname when using --wipe-disk option" && exit
 
 # Update System Clock
 timedatectl set-ntp true
