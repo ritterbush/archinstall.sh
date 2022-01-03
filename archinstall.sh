@@ -153,7 +153,7 @@ while [ -n "$1" ]; do
 done
 
 # If wipe disk option used, check a diskname has been given
-[ $wipe = true ] && [ $disk = none ] && echo "Specify diskname with -d|--diskname when using --wipe-disk option" && exit
+[ $wipe = true ] && [ $disk = none ] && { echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit; }
 
 # Update System Clock
 timedatectl set-ntp true
@@ -280,6 +280,7 @@ then
 fi # End of -f option
 
 # Clean up
+# Can't be outside of script since it complains about being read-only
 rm -f /chrootfile.sh
 
 # Good idea to unmount drives before exiting chroot
