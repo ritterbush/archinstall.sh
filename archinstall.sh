@@ -57,6 +57,11 @@ homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
 # My own personal preference options
 mirrors=default
 
+if [ $# -eq 0 ]; then
+    show_usage
+    exit
+fi
+
 while [ -n "$1" ]; do
     case "$1" in
         --username|-u)
