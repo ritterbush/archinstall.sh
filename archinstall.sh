@@ -3,7 +3,7 @@
 # Run with -h option to see full usage and checklist before installing via script
 
 show_usage(){
-    printf "Usage:\n\n  $0 [options [parameters]]\n"
+    printf "Usage:\n\n  %s [options [parameters]]\n" "$0"
     printf "\n"
     printf "Installs Arch Linux on UEFI systems. See Checklist after Options.\n"
     printf "\n"
