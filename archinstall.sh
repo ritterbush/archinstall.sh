@@ -59,7 +59,6 @@ mirrors=default
 
 if [ $# -eq 0 ]; then
     show_usage
-    exit
 fi
 
 while [ -n "$1" ]; do
