@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Run with -h option to see full usage and checklist before installing via script
+# Run with -h option to see full usage and checklist
 
 show_usage(){
     printf "Usage:\n\n  %s [options [parameters]]\n" "$0"
@@ -46,6 +46,7 @@ password=password # Change with -p
 timezone=America/Los_Angeles # Change with -t. To see options: ls /usr/share/zoneinfo
 hostname=arch # Change with -o
 staticip=127.0.1.1 # Change with -s
+mirrors=default # My own personal preference options
 full=false # If -f option used, fully install ComfyOS desktop, otherwise do a basic installation 
 cpu=other # Must be other or amd or intel
 wipe=false # If -w option is used, wipes disk clean and makes partitions according to the below variables
@@ -53,9 +54,6 @@ disk=none # Wipes the disk '/dev/disk', can be changed with -d; use the letters 
 efipart="$disk"1 # Same name as disk above but with 1 at the end
 rootpart="$disk"2 # Same name as disk above but 2 instead of 1 at the end
 homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
-
-# My own personal preference options
-mirrors=default
 
 if [ $# -eq 0 ]; then
     show_usage
@@ -161,6 +159,7 @@ done
 
 # Update System Clock
 timedatectl set-ntp true
+sleep 1 # Allow a moment to syncronize
 
 if [ $wipe = true ] # -w option
 then
@@ -219,14 +218,11 @@ sed -i 's/#en_US ISO-8859-1/en_US ISO-8859-1/' /etc/locale.gen
 locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 
-# Sets LANG=en_US.UTF-8 as the BASH keyboard
-#export LANG=en_US.UTF-8
-
 # Create hostname file with hostname
 echo "$hostname" > /etc/hostname
 
 # Create hosts file
-echo -e '127.0.0.1\tlocalhost\n::1\t\tlocalhost\n'"$staticip\t""$hostname"'.localdomain\t'"$hostname" | cat >> /etc/hosts
+echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n${staticip}\t${hostname}.localdomain\t${hostname}" >> /etc/hosts
 
 # Give root a password, add username to wheel, audio, etc. groups and give username same password as root
 (echo "$password"; echo "$password") | passwd
@@ -242,16 +238,16 @@ pacman -Syy
 [ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
 # Give the wheel group root priviledges
-sed -i 's/# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+sed -i "s/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/" /etc/sudoers
 
 # Add Pacman the videogame character to the pacman progress bar, make pacman more colorful, and see pkg versions
-sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf
+sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf # Note lack of 's' at start; 'a' to insert line after, 'i' before 
 sed -i "s/^#Color/Color/" /etc/pacman.conf
 sed -i "s/^#VerbosePkgLists/VerbosePkgLists/" /etc/pacman.conf
 
 # Enable 32-bit library support
-sed -i "/^#\[multilib\]/aQQ" /etc/pacman.conf
-sed -i -z "s/QQ\n#Include/Include/" /etc/pacman.conf
+sed -i "/^#\[multilib\]/aQQ" /etc/pacman.conf # Mark correct #Include for below; note again lack of 's' at start
+sed -i -z "s/QQ\n#Include/Include/" /etc/pacman.conf # -z separate lines by NUL chars
 sed -i "s/^#\[multilib\]/[multilib]/" /etc/pacman.conf
 
 # Use all cores when compiling from source
@@ -266,21 +262,19 @@ systemctl enable NetworkManager
 
 # Bootloader install and setup
 echo Y | pacman -S grub efibootmgr
-#mkdir /efi
-#mount /dev/$efipart /efi #https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
 if [ $full = true ] # -f option
 then
-	# Grab post-install setup script (to run after verifying that things are basically working)
+	# Download ComfyOS setup script and run it as the user
 	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > setup-arch-based.sh
 	mv /setup-arch-based.sh /home/"$username"/setup-arch-based.sh
-	chown "$username":"$username" /home/"$username"/setup-arch-based.sh
+	chown "${username}:$username" /home/"$username"/setup-arch-based.sh
 	chmod +x /home/"$username"/setup-arch-based.sh
 
-	# Running it as username
-	echo "$password" | sudo -S su - "$username" -c "sh /home/"$username"/setup-arch-based.sh -c -p ${password}"
+	# Run it as the user
+	echo "$password" | sudo -S su - "$username" -c "sh /home/${username}/setup-arch-based.sh -c -p $password"
 fi # End of -f option
 
 # Clean up
@@ -298,4 +292,4 @@ chmod +x /mnt/chrootfile.sh
 # Execute it
 arch-chroot /mnt ./chrootfile.sh
 
-echo done
+echo "$0" Completed Successfully
