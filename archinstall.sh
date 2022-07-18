@@ -222,7 +222,7 @@ echo LANG=en_US.UTF-8 > /etc/locale.conf
 echo "$hostname" > /etc/hostname
 
 # Create hosts file
-echo -e "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n${staticip}\t${hostname}.localdomain\t${hostname}" >> /etc/hosts
+printf "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n%s\t%s.localdomain\t%s\n" "$staticip" "$hostname" "$hostname" >> /etc/hosts
 
 # Give root a password, add username to wheel, audio, etc. groups and give username same password as root
 (echo "$password"; echo "$password") | passwd
@@ -233,9 +233,9 @@ useradd -m -G wheel,audio,optical,disk,storage,video "$username"
 pacman -Syy
 
 # Grab more base packages and cpu specific microcode
-[ "$cpu" == amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
-[ "$cpu" == intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
-[ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
+[ "$cpu" = amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
+[ "$cpu" = intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
+[ "$cpu" = other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
 # Give the wheel group root priviledges
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
