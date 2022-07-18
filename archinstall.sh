@@ -144,7 +144,7 @@ while [ -n "$1" ]; do
             show_usage
             ;;
         --usa-sw-mirrors)
-            mirrors='usa-sw'
+            mirrors="usa-sw"
             shift
             ;;
         *)
@@ -155,7 +155,7 @@ while [ -n "$1" ]; do
 done
 
 # If wipe disk option used, check a diskname has been given
-[ $wipe = true ] && [ $disk = none ] && { echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit; }
+[ "$wipe" = true ] && [ "$disk" = none ] && { echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit; }
 
 # Update System Clock
 timedatectl set-ntp true
@@ -198,7 +198,7 @@ pacman -Syy
 echo Y | pacman -S archlinux-keyring
 
 # Personal preference with --usa-sw-mirrors flag: Send good USA sites to the top of the  mirrorlist
-#[ $mirrors = 'usa-sw' ] && sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
+#[ $mirrors = "usa-sw" ] && sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
 
 # Install just the bare minimum until chroot
 pacstrap /mnt base
@@ -213,8 +213,8 @@ ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime
 hwclock --systohc
 
 # Localization
-sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-sed -i 's/#en_US ISO-8859-1/en_US ISO-8859-1/' /etc/locale.gen
+sed -i "s/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen
+sed -i "s/#en_US ISO-8859-1/en_US ISO-8859-1/" /etc/locale.gen
 locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 
@@ -265,7 +265,7 @@ echo Y | pacman -S grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
-if [ $full = true ] # -f option
+if [ "$full" = true ] # -f option
 then
 	# Download ComfyOS setup script and run it as the user
 	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > setup-arch-based.sh
@@ -291,4 +291,4 @@ chmod +x /mnt/chrootfile.sh
 # Execute it
 arch-chroot /mnt ./chrootfile.sh
 
-echo "$0" Completed Successfully
+echo "$0 Completed Successfully"
