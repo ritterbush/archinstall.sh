@@ -238,7 +238,7 @@ pacman -Syy
 [ "$cpu" == other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
 # Give the wheel group root priviledges
-sed -i "s/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/" /etc/sudoers
+sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 
 # Add Pacman the videogame character to the pacman progress bar, make pacman more colorful, and see pkg versions
 sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf # Note lack of 's' at start; 'a' to insert line after, 'i' before 
