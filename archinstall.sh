@@ -73,14 +73,16 @@ efipart="$disk"1 # Same name as disk above but with 1 at the end
 rootpart="$disk"2 # Same name as disk above but 2 instead of 1 at the end
 homepart="$disk"3 # Same name as disk above but 3 instead of 2 at the end
 
-if [ $# -eq 0 ]; then
+if [ $# -eq 0 ]
+then
     show_usage
 fi
 
-while [ -n "$1" ]; do
+while [ -n "$1" ]
+do
     case "$1" in
         --username|-u)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 username="$2"
                 shift 2
@@ -90,7 +92,7 @@ while [ -n "$1" ]; do
             fi
             ;;
         --password|-p)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 password="$2"
                 shift 2
@@ -100,7 +102,7 @@ while [ -n "$1" ]; do
             fi
             ;;
         --hostname|-o)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 hostname="$2"
                 shift 2
@@ -110,7 +112,7 @@ while [ -n "$1" ]; do
             fi
             ;;
         --timezone|-t)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 timezone="$2"
                 shift 2
@@ -120,7 +122,7 @@ while [ -n "$1" ]; do
             fi
             ;;
         --staticip|-s)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 staticip="$2"
                 shift 2
@@ -146,7 +148,7 @@ while [ -n "$1" ]; do
             shift
             ;;
         --diskname|-d)
-            if [ -n "$2"  ]
+            if [ -n "$2" ]
             then
                 disk="$2"
                 efipart="$disk"1 # Same name as disk above but with 1 at the end
