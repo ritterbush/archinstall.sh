@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# Run with -h option to see full usage and checklist
-
-show_usage(){
+show_usage() {
     printf "Usage:\n\n  %s [options [parameters]]\n" "$0"
     printf "\n"
     printf "Installs Arch Linux on UEFI systems. See Checklist after Options.\n"
@@ -181,9 +179,8 @@ done
 timedatectl set-ntp true
 sleep 1 # Allow a moment to syncronize
 
-if [ $wipe = true ] # -w option
+if [ $wipe = true ] # --wipe-disk option
 then
-
     # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
     ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
     sleep 1
@@ -212,7 +209,7 @@ then
     mkdir -p /mnt/home
     mount /dev/"$efipart" /mnt/efi # "Tip: /efi is a replacement . . ." See reference: https://wiki.archlinux.org/index.php/EFI_system_partition#Mount_the_partition
     mount /dev/"$homepart" /mnt/home
-fi #end of -w option
+fi # End of --wipe-disk option
 
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
@@ -288,8 +285,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 if [ "$6" = true ] # -f option
 then
 	# Download ComfyOS setup script and run it as the user
-	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > setup-arch-based.sh
-	mv /setup-arch-based.sh /home/"$1"/setup-arch-based.sh
+	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > /home/"$1"/setup-arch-based.sh
 	chown "${1}:$1" /home/"$1"/setup-arch-based.sh
 	chmod +x /home/"$1"/setup-arch-based.sh
 
