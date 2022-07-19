@@ -64,7 +64,7 @@ password=password # Change with -p
 timezone=America/Los_Angeles # Change with -t. To see options: ls /usr/share/zoneinfo
 hostname=arch # Change with -o
 staticip=127.0.1.1 # Change with -s
-mirrors=default # My own personal preference options
+mirrors=default # Change with --usa-sw-mirrors (My preference mirrors; hidden)
 full=false # If -f option used, fully install ComfyOS desktop, otherwise do a basic installation 
 cpu=other # Must be other or amd or intel
 wipe=false # If -w option is used, wipes disk clean and makes partitions according to the below variables
@@ -161,7 +161,7 @@ while [ -n "$1" ]; do
         --help|-h)
             show_usage
             ;;
-        --usa-sw-mirrors)
+        --usa-sw-mirrors) # My preference mirrors; hidden
             mirrors="usa-sw"
             shift
             ;;
@@ -214,8 +214,8 @@ fi # End of --wipe-disk option
 pacman -Syy
 echo Y | pacman -S archlinux-keyring
 
-# Personal preference with --usa-sw-mirrors flag: Send good USA sites to the top of the  mirrorlist
-#[ $mirrors = "usa-sw" ] && sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
+# Personal preference with --usa-sw-mirrors flag: Send good USA sites to the top of the mirrorlist (edit with your favorites)
+[ $mirrors = "usa-sw" ] && sed -i '6i\Server = http://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = https://mirror.arizona.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch\nServer = http://arch.mirror.constant.com/$repo/os/$arch\nServer = https://arch.mirror.constant.com/$repo/os/$arch\nServer = http://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = https://mirrors.kernel.org/archlinux/$repo/os/$arch\nServer = http://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rit.edu/archlinux/$repo/os/$arch\nServer = http://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = https://mirrors.rutgers.edu/archlinux/$repo/os/$arch\nServer = http://ca.us.mirror.archlinux-br.org/$repo/os/$arch' /etc/pacman.d/mirrorlist
 
 # Install just the bare minimum until chroot
 pacstrap /mnt base
