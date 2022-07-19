@@ -207,9 +207,9 @@ pacstrap /mnt base
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Create the chroot script that executes inside the new Arch system 
-cat > /mnt/chrootfile.sh <<End-of-message
+cat > /mnt/chrootfile.sh <<"End-of-message"
 # Set Timezone
-ln -sf /usr/share/zoneinfo/"$timezone" /etc/localtime
+ln -sf /usr/share/zoneinfo/"$3" /etc/localtime
 hwclock --systohc
 
 # Localization
@@ -219,23 +219,23 @@ locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 
 # Create hostname file with hostname
-echo "$hostname" > /etc/hostname
+echo "$4" > /etc/hostname
 
 # Create hosts file
-printf "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n%s\t%s.localdomain\t%s\n" "$staticip" "$hostname" "$hostname" >> /etc/hosts
+printf "127.0.0.1\tlocalhost\n::1\t\tlocalhost\n%s\t%s.localdomain\t%s\n" "$5" "$4" "$4" >> /etc/hosts
 
 # Give root a password, add username to wheel, audio, etc. groups and give username same password as root
-(echo "$password"; echo "$password") | passwd
-useradd -m -G wheel,audio,optical,disk,storage,video "$username"
-(echo "$password"; echo "$password") | passwd "$username"
+(echo "$2"; echo "$2") | passwd
+useradd -m -G wheel,audio,optical,disk,storage,video "$1"
+(echo "$2"; echo "$2") | passwd "$1"
 
 # Update available packages list
 pacman -Syy
 
 # Grab more base packages and cpu specific microcode
-[ "$cpu" = amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
-[ "$cpu" = intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
-[ "$cpu" = other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
+[ "$7" = amd ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware amd-ucode
+[ "$7" = intel ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware intel-ucode
+[ "$7" = other ] && (echo; echo; echo Y) | pacman -S base-devel linux linux-firmware
 
 # Give the wheel group root priviledges
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
@@ -265,16 +265,16 @@ echo Y | pacman -S grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB #https://wiki.archlinux.org/index.php/GRUB#UEFI_systems
 grub-mkconfig -o /boot/grub/grub.cfg
 
-if [ "$full" = true ] # -f option
+if [ "$6" = true ] # -f option
 then
 	# Download ComfyOS setup script and run it as the user
 	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > setup-arch-based.sh
-	mv /setup-arch-based.sh /home/"$username"/setup-arch-based.sh
-	chown "${username}:$username" /home/"$username"/setup-arch-based.sh
-	chmod +x /home/"$username"/setup-arch-based.sh
+	mv /setup-arch-based.sh /home/"$1"/setup-arch-based.sh
+	chown "${1}:$1" /home/"$1"/setup-arch-based.sh
+	chmod +x /home/"$1"/setup-arch-based.sh
 
 	# Run it as the user
-	echo "$password" | sudo -S su - "$username" -c "sh /home/${username}/setup-arch-based.sh -c -p $password"
+	echo "$2" | sudo -S su - "$1" -c "sh /home/${1}/setup-arch-based.sh -c -p $2"
 fi # End of -f option
 
 # Clean up
@@ -289,6 +289,6 @@ End-of-message
 chmod +x /mnt/chrootfile.sh
 
 # Execute it
-arch-chroot /mnt ./chrootfile.sh
+arch-chroot /mnt ./chrootfile.sh "$username" "$password" "$timezone" "$hostname" "$staticip" "$full" "$cpu"
 
 echo "$0 Completed Successfully"
