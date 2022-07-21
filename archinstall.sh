@@ -11,14 +11,14 @@ show_usage() {
                              used use single quotes.\n"
     printf "  -p|--password [password]   Specify password; if special characters are
                              used use single quotes.\n"
-    printf "  -o|--hostname [hostname]   Specify hostname:~ the name of the computer 
+    printf "  -o|--hostname [hostname]   Specify hostname: the name of the computer
                              of this operating system.\n"
     printf "  -t|--timezone [timezone]   Specify timezone; use single quotes.
                              To see options: ls /usr/share/zoneinfo\n"
     printf "  -s|--staticip [staticip]   Specify local static ip address (setup with
-                             your router). Do not use if no local static 
+                             your router). Do not use if no local static
                              ip address has been set up. Use single quotes.\n"
-    printf "  -f|--full                  Install ComfyOS setup after basic Arch 
+    printf "  -f|--full                  Install ComfyOS setup after basic Arch
                              installation.\n"
     printf "  -a|--amdcpu                Use amd cpu microcode.\n"
     printf "  -i|--intelcpu              Use intel cpu microcode.\n"
@@ -65,7 +65,7 @@ timezone=America/Los_Angeles # Change with -t. To see options: ls /usr/share/zon
 hostname=arch # Change with -o
 staticip=127.0.1.1 # Change with -s
 mirrors=default # Change with --usa-sw-mirrors (My preference mirrors; hidden)
-full=false # If -f option used, fully install ComfyOS desktop, otherwise do a basic installation 
+full=false # If -f option used, fully install ComfyOS desktop, otherwise do a basic installation
 cpu=other # Must be other or amd or intel
 wipe=false # If -w option is used, wipes disk clean and makes partitions according to the below variables
 disk=none # Wipes the disk '/dev/disk', can be changed with -d; use the letters that follow /dev/ and that specify the disk to wipe
@@ -183,7 +183,7 @@ sleep 1 # Allow a moment to syncronize
 
 if [ $wipe = true ] # --wipe-disk option
 then
-    # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run 
+    # Wipe the disk, and in particular wipe the partitions previously made first, if this script has been already run
     ls /dev/"$homepart" > /dev/null 2>&1 && wipefs --all --force /dev/"$homepart"
     sleep 1
     ls /dev/"$rootpart" > /dev/null 2>&1 && wipefs --all --force /dev/"$rootpart"
@@ -225,7 +225,7 @@ pacstrap /mnt base
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Create the chroot script that executes inside the new Arch system 
+# Create the chroot script that executes inside the new Arch system
 cat > /mnt/chrootfile.sh <<"End-of-message"
 # Set Timezone
 ln -sf /usr/share/zoneinfo/"$3" /etc/localtime
@@ -260,7 +260,7 @@ pacman -Syy
 sed -i "s/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 
 # Add Pacman the videogame character to the pacman progress bar, make pacman more colorful, and see pkg versions
-sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf # Note lack of 's' at start; 'a' to insert line after, 'i' before 
+sed -i "/^#VerbosePkgLists/aILoveCandy" /etc/pacman.conf # Note lack of 's' at start; 'a' to insert line after, 'i' before
 sed -i "s/^#Color/Color/" /etc/pacman.conf
 sed -i "s/^#VerbosePkgLists/VerbosePkgLists/" /etc/pacman.conf
 
@@ -286,13 +286,13 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 if [ "$6" = true ] # -f option
 then
-	# Download ComfyOS setup script and run it as the user
-	curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > /home/"$1"/setup-arch-based.sh
-	chown "${1}:$1" /home/"$1"/setup-arch-based.sh
-	chmod +x /home/"$1"/setup-arch-based.sh
+    # Download ComfyOS setup script and run it as the user
+    curl https://raw.githubusercontent.com/ritterbush/ComfyOS/master/setup-arch-based.sh > /home/"$1"/setup-arch-based.sh
+    chown "${1}:$1" /home/"$1"/setup-arch-based.sh
+    chmod +x /home/"$1"/setup-arch-based.sh
 
-	# Run it as the user
-	echo "$2" | sudo -S su - "$1" -c "sh /home/${1}/setup-arch-based.sh -c -p $2"
+    # Run it as the user
+    echo "$2" | sudo -S su - "$1" -c "sh /home/${1}/setup-arch-based.sh -c -p $2"
 fi # End of -f option
 
 # Clean up
