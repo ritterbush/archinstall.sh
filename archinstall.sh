@@ -226,7 +226,7 @@ pacstrap /mnt base
 genfstab -U /mnt >> /mnt/etc/fstab
 
 # Create the chroot script that executes inside the new Arch system
-cat > /mnt/chrootfile.sh <<"End-of-message"
+cat > /mnt/chrootfile.sh <<"EOF"
 # Set Timezone
 ln -sf /usr/share/zoneinfo/"$3" /etc/localtime
 hwclock --systohc
@@ -301,7 +301,7 @@ rm -f /chrootfile.sh
 
 # Exit chroot
 exit
-End-of-message
+EOF
 
 # Make that script executable
 chmod +x /mnt/chrootfile.sh
