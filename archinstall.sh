@@ -88,7 +88,7 @@ do
                 shift 2
             else
                 echo "-u flag requires a username"
-                exit
+                exit 1
             fi
             ;;
         --password|-p)
@@ -98,7 +98,7 @@ do
                 shift 2
             else
                 echo "-p option requires a password"
-                exit
+                exit 1
             fi
             ;;
         --hostname|-o)
@@ -108,7 +108,7 @@ do
                 shift 2
             else
                 echo "-o option requires a hostname"
-                exit
+                exit 1
             fi
             ;;
         --timezone|-t)
@@ -118,7 +118,7 @@ do
                 shift 2
             else
                 echo "-t option requires a timezone"
-                exit
+                exit 1
             fi
             ;;
         --staticip|-s)
@@ -128,7 +128,7 @@ do
                 shift 2
             else
                 echo "-s option requires a static ip address"
-                exit
+                exit 1
             fi
             ;;
         --full|-f)
@@ -157,7 +157,7 @@ do
                 shift 2
             else
                 echo "-d option requires a diskname"
-                exit
+                exit 1
             fi
             ;;
         --help|-h)
@@ -175,7 +175,7 @@ do
 done
 
 # If wipe disk option used, check a diskname has been given
-[ "$wipe" = true ] && [ "$disk" = none ] && { echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit; }
+[ "$wipe" = true ] && [ "$disk" = none ] && { echo "Specify diskname with -d|--diskname when using --wipe-disk option"; exit 1; }
 
 # Update System Clock
 timedatectl set-ntp true
